@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "type": "go",
+            "label": "go: build package",
+            "command": "build",
+            "args": [
+                "${fileDirname}"
+            ],
+            "problemMatcher": [
+                "$go"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "cd /Users/cjlapao/code/acme_weather_demo_backend; go build ${fileDirname}"
+        },
+        {
+            "command": "podman",
+            "type": "shell",
+            "label": "podman: build image",
+            "args": [
+                "build",
+                "-t",
+                "acme_weather_demo_backend",
+                "--build-arg=\"API_TOKEN=${input:API_TOKEN}\"",
+                "."
+            ],
+            
+        }
+    ],
+    "inputs": [
+        {
+            "id": "API_TOKEN",
+            "type": "promptString",
+            "description": "API Token for OpenWeatherMap"
+        }
+    ]
+}
