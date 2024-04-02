@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Parallels/acme-weather-demo-backend/services"
+	"github.com/Locally-build/acme-weather-backend/services"
 	"github.com/gorilla/mux"
 )
 
@@ -27,11 +27,17 @@ func GeoLocationHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		_, err := w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Print(err)
+		}
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(resp)
+	err = json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		log.Print(err)
+	}
 }

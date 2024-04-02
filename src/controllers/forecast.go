@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Parallels/acme-weather-demo-backend/entities"
-	"github.com/Parallels/acme-weather-demo-backend/services"
+	"github.com/Locally-build/acme-weather-backend/entities"
+	"github.com/Locally-build/acme-weather-backend/services"
 	"github.com/gorilla/mux"
 )
 
@@ -27,7 +27,10 @@ func CityWeatherForecastHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		_, err := w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Print(err)
+		}
 		return
 	}
 
@@ -55,5 +58,9 @@ func CityWeatherForecastHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(forecastResponse)
+	err = json.NewEncoder(w).Encode(forecastResponse)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Print(err)
+	}
 }

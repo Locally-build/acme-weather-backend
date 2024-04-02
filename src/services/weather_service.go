@@ -3,9 +3,10 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 
-	"github.com/Parallels/acme-weather-demo-backend/entities"
+	"github.com/Locally-build/acme-weather-backend/entities"
 	"github.com/go-resty/resty/v2"
 )
 
@@ -27,6 +28,10 @@ func GetWeatherService() *WeatherService {
 	if globalWeatherService == nil {
 		globalWeatherService = NewWeatherService(os.Getenv("OPENWEATHERMAP_API_KEY"))
 	}
+	encryptedAPIKey := globalWeatherService.apiKey[:4] + "..." + globalWeatherService.apiKey[len(globalWeatherService.apiKey)-4:]
+
+	log.Println("Initialized WeatherService with API key: ", encryptedAPIKey)
+
 	return globalWeatherService
 }
 

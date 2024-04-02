@@ -1,4 +1,4 @@
-module github.com/Parallels/acme-weather-demo-backend
+module github.com/Locally-build/acme-weather-backend
 
 go 1.20
 

@@ -7,14 +7,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Parallels/acme-weather-demo-backend/controllers"
-	"github.com/Parallels/acme-weather-demo-backend/entities"
-	"github.com/Parallels/acme-weather-demo-backend/services"
+	"github.com/Locally-build/acme-weather-backend/controllers"
+	"github.com/Locally-build/acme-weather-backend/entities"
+	"github.com/Locally-build/acme-weather-backend/services"
 	"github.com/go-resty/resty/v2"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 )
+
+var version = "0.0.0"
 
 type WeatherResponse struct {
 	Weather []struct {
@@ -85,7 +86,10 @@ func weatherHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Print(err)
+		}
 		return
 	}
 
@@ -93,10 +97,10 @@ func weatherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	fmt.Printf("********************************************************************************\n")
+	fmt.Printf("* Acme Weather Backend API                                                     *\n")
+	fmt.Printf("* Version: %s                                                               *\n", version)
+	fmt.Printf("********************************************************************************\n")
 	services.GetWeatherService()
 
 	router := mux.NewRouter()

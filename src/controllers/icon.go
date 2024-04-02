@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Parallels/acme-weather-demo-backend/services"
+	"github.com/Locally-build/acme-weather-backend/services"
 	"github.com/gorilla/mux"
 )
 
@@ -25,6 +25,9 @@ func IconHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "image/png")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(iconPath))
-
+	_, err = w.Write([]byte(iconPath))
+	if err != nil {
+		log.Print(err)
+		return
+	}
 }
